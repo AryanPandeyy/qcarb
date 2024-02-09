@@ -20,16 +20,30 @@ impl Molecule {
         for l in lines {
             if let Ok(ip) = l {
                 let vec = ip.split_whitespace().collect::<Vec<&str>>();
-                &self.z_value.push(vec[0].parse::<i32>().unwrap());
-                &self.x.push(vec[1].parse::<f32>().unwrap());
-                &self.y.push(vec[2].parse::<f32>().unwrap());
-                &self.z.push(vec[3].parse::<f32>().unwrap());
+                self.z_value.push(vec[0].parse::<i32>().unwrap());
+                self.x.push(vec[1].parse::<f32>().unwrap());
+                self.y.push(vec[2].parse::<f32>().unwrap());
+                self.z.push(vec[3].parse::<f32>().unwrap());
             }
         }
     }
-}
 
-fn find_bond_len(atom1: &Molecule, atom2: &Molecule) -> f32 {
-    let r: f32 = 0.0;
-    r
+    pub fn find_bond_len(&mut self) -> f32 {
+        let r: f32 = 0.0;
+        let idx = self.idx;
+        for i in 0..idx {
+            for j in 0..i {
+                let mut x = &self.x[i as usize] - &self.x[j as usize];
+                x = x * x;
+                let mut y = &self.y[i as usize] - &self.y[j as usize];
+                y = y * y;
+                let mut z = &self.z[i as usize] - &self.z[j as usize];
+                z = z * z;
+                let mut r = x + y + z;
+                r = r.sqrt();
+                println!("i: {i} and j: {j} {}", r);
+            }
+        }
+        r
+    }
 }
